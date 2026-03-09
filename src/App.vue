@@ -289,7 +289,11 @@ const authLoading = ref(false)
 const authError   = ref('')
 const authForm    = ref({ email: '', password: '' })
 
-const isAuthenticated = computed(() => !!token.value)
+
+const isAuthenticated = computed(() => !!token.value)  
+
+// const isAuthenticated = computed(() => true) /// Войти на основной сайт без реги
+
 
 // --- App state ---
 const starsCanvas  = ref(null)
@@ -1294,5 +1298,5 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 
   transform: translateY(12px); 
 }
-
 </style>
+

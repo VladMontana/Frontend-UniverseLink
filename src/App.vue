@@ -161,6 +161,7 @@
           <div class="modal-field">
             <label>Свой код <span class="optional">необязательно</span></label>
             <input v-model="form.customCode" class="modal-input" placeholder="my-link" maxlength="20" />
+            <span v-if="error" class="error-msg">{{ error }}</span>
           </div>
 
           <div class="modal-row">
@@ -287,6 +288,7 @@ const userEmail   = ref(localStorage.getItem('userEmail') || '')
 const authMode    = ref('login')
 const authLoading = ref(false)
 const authError   = ref('')
+const error = ref('') 
 const authForm    = ref({ email: '', password: '' })
 
 
@@ -415,6 +417,8 @@ async function fetchLinks() {
 async function createLink() {
   if (!form.value.url) return
   loading.value = true
+  error.value = ''
+
   try {
     const body = {
       original_url: form.value.url,
@@ -433,6 +437,13 @@ async function createLink() {
     })
 
     if (res.status === 401) { logout(); return }
+    
+    if (!res.ok) {
+      const data = await res.json()
+      error.value = data.detail
+      return
+    }
+
     if (res.ok) {
       const newLink = await res.json()
       links.value.unshift(newLink)
@@ -547,6 +558,7 @@ async function copyLink(code) {
 function resetForm() {
   form.value = { url: '', customCode: '', maxClicks: null, expiresAt: '' }
   inputUrl.value = ''
+  error.value = ''
 }
 
 function truncate(str, n = 38) {
@@ -921,10 +933,17 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   justify-content: space-between; 
   margin-bottom: 8px; gap: 8px; 
 }
+
 .detail-short { 
   font-family: var(--mono); font-size: 14px; 
   color: var(--purple2); word-break: break-all; 
   display: block; 
+}
+
+.error-msg {
+  font-size: 12px;
+  color: #EC4899;
+  margin-top: 4px;
 }
 
 .detail-actions { 

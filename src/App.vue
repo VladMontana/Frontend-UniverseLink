@@ -1463,6 +1463,6 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
     flex-direction: column;
     gap: 12px;
   }
-}
+
 </style>
 

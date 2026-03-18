@@ -1,7 +1,11 @@
 <template>
   <div class="app">
     <canvas ref="starsCanvas" class="stars-canvas" />
-
+    <button class="burger-btn" @click="sidebarOpen = !sidebarOpen">
+      {{ sidebarOpen ? '✕' : '☰' }}
+    </button>
+    <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false" />
+    
     <!-- ЭКРАН АВТОРИЗАЦИИ -->
     <transition name="fade">
       <div v-if="!isAuthenticated" class="auth-overlay">
@@ -39,7 +43,7 @@
 
     <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <template v-if="isAuthenticated">
-      <aside class="sidebar">
+      <aside class="sidebar" :class="{ open: sidebarOpen }">
         <div class="sidebar-header">
           <span class="sidebar-title">История ссылок</span>
           <span class="sidebar-count">{{ links.length }}</span>
@@ -85,7 +89,7 @@
           <h1 class="logo">
             <span class="logo-light">Universe</span><span class="logo-bold">Link</span>
           </h1>
-          <p class="tagline">Сервис по сокращению ссылок с аналитикой</p>
+          <p class="tagline">Вся вселенная в одной ссылке.</p>
         </div>
 
         <div class="input-wrapper">
@@ -313,6 +317,7 @@ const inputUrl     = ref('')
 const showModal    = ref(false)
 const loading      = ref(false)
 const copied       = ref(false)
+const sedibarOpen = ref(false)
 
 const form = ref({ url: '', customCode: '', maxClicks: null, expiresAt: '' })
 
@@ -1389,5 +1394,73 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 }
 
 .theme-btn:hover { border-color: var(--purple2); }
+
+/* MOBILE */
+.burger-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    height: 100%;
+    z-index: 50;
+    transition: left 0.25s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+    backdrop-filter: blur(2px);
+  }
+
+  .burger-btn {
+    display: flex;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 60;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .main {
+    padding: 20px 16px;
+  }
+
+  .input-wrapper {
+    max-width: 100%;
+  }
+
+  .link-detail {
+    max-width: 100%;
+  }
+
+  .modal {
+    max-width: 95vw;
+    padding: 24px 20px;
+  }
+
+  .modal-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
 </style>
 

@@ -1,10 +1,6 @@
 <template>
   <div class="app">
     <canvas ref="starsCanvas" class="stars-canvas" />
-    <button class="burger-btn" @click="sidebarOpen = !sidebarOpen">
-      {{ sidebarOpen ? '✕' : '☰' }}
-    </button>
-    <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false" />
     
     <!-- ЭКРАН АВТОРИЗАЦИИ -->
     <transition name="fade">
@@ -43,6 +39,11 @@
 
     <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <template v-if="isAuthenticated">
+      <button class="burger-btn" @click="sidebarOpen = !sidebarOpen">
+        {{ sidebarOpen ? '✕' : '☰' }}
+      </button>
+      <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false" />
+      
       <aside class="sidebar" :class="{ open: sidebarOpen }">
         <div class="sidebar-header">
           <span class="sidebar-title">История ссылок</span>
